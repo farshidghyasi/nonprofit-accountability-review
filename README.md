@@ -12,7 +12,7 @@ Give it the name of an organisation (or a whole cause or sector) and it works th
 
 It produces neutral, sourced reports with a **red-flag scorecard**, a **right-of-reply letter** for the organisation, and a **source register** so every figure can be checked.
 
-Works with **Claude** (as an installable skill), **ChatGPT** (as a custom GPT or project), and **any capable AI assistant** (as a single paste-in prompt).
+Works with **Claude** (as an installable skill), **ChatGPT**, **Grok**, **Gemini**, **Perplexity** and **Microsoft Copilot** (as a custom assistant with instructions and a knowledge file), and **any other capable AI assistant** (as a single paste-in prompt).
 
 > **Important.** This is a research method, not a verdict machine. A red flag is a question the public record leaves open, **not evidence of wrongdoing**. AI can misread filings and sound more certain than the evidence allows. Every output must be checked against the primary documents before it is relied on or published. Nothing here is legal, tax or financial advice.
 
@@ -22,11 +22,7 @@ Works with **Claude** (as an installable skill), **ChatGPT** (as a custom GPT or
 
 - [What it can do](#what-it-can-do)
 - [Quick start](#quick-start)
-  - [Claude.ai (web, desktop, mobile)](#1-claudeai-web-desktop-mobile)
-  - [Claude Code](#2-claude-code)
-  - [Claude API / Agent SDK](#3-claude-api--agent-sdk)
-  - [ChatGPT](#4-chatgpt)
-  - [Any other AI assistant](#5-any-other-ai-assistant)
+- [User guide (every assistant, step by step)](docs/GUIDE.md)
 - [How to ask for a review](#how-to-ask-for-a-review)
 - [What you get back](#what-you-get-back)
 - [The method in brief](#the-method-in-brief)
@@ -55,47 +51,41 @@ Optional extras on request: Word/PDF versions, a spreadsheet source register, a 
 
 ## Quick start
 
-First download the skill: on this page click **Code → Download ZIP**, or grab the ready-made **`dist/nonprofit-accountability-review.zip`** (the skill folder only, packaged for upload).
+**Full step-by-step instructions for every assistant are in the [User guide](docs/GUIDE.md).** The short version:
 
-### 1. Claude.ai (web, desktop, mobile)
+| Assistant | Setup | Files |
+|---|---|---|
+| **Claude** (web, desktop, mobile) | Customize → Skills → **+** → Upload a skill (code execution on) | [`dist/nonprofit-accountability-review.zip`](dist/nonprofit-accountability-review.zip) |
+| **Claude Code** | Copy the skill folder to `~/.claude/skills/` | [`skills/nonprofit-accountability-review/`](skills/nonprofit-accountability-review/) |
+| **Claude API / Agent SDK** | Upload via the Skills API | same folder |
+| **ChatGPT** | Custom GPT or Project: instructions + knowledge; web search and code interpreter on | [`instructions/INSTRUCTIONS.md`](instructions/INSTRUCTIONS.md) + [`dist/knowledge-pack.md`](dist/knowledge-pack.md) |
+| **Grok** | Project (or custom instructions) + knowledge pack; DeepSearch on | same two files |
+| **Gemini** | Gem: instructions + knowledge | same two files |
+| **Perplexity** | Space: custom instructions + file | same two files |
+| **Microsoft Copilot** | Microsoft 365 agent (instructions + knowledge), or paste-in prompt | same two files, or [`PROMPT.md`](PROMPT.md) |
+| **Anything else** (Mistral, DeepSeek, local models…) | Paste the prompt into a new chat | [`PROMPT.md`](PROMPT.md) |
 
-1. Make sure **code execution** is on: **Settings → Capabilities** (Free, Pro and Max). On Team and Enterprise plans your organisation owner may need to enable skills.
-2. Go to **Customize → Skills**, click **+**, choose **Create skill → Upload a skill**.
-3. Upload **`dist/nonprofit-accountability-review.zip`**.
-4. Make sure the skill is toggled **on**. Turn on **web search** for the chat.
-5. Ask: *"Use the nonprofit accountability review skill to review [organisation] for FY2020-FY2024."*
+### Claude in 60 seconds
+1. Download [`dist/nonprofit-accountability-review.zip`](dist/nonprofit-accountability-review.zip).
+2. In Claude: **Settings → Capabilities** → make sure code execution is on.
+3. **Customize → Skills → + → Create skill → Upload a skill** → choose the zip.
+4. In a chat with web search on, ask: *"Review [organisation], [country], FY2020-FY2024, with a scorecard and right-of-reply questions."*
 
-Claude loads the skill automatically whenever you ask for nonprofit research. See Anthropic's help article [Use skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude) for the current menu names.
+See [Use skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude) for current menu names.
 
-**Tip:** if you have the Claude desktop app with a browser extension or computer use, Claude can open registries that block automated fetching (several do). It will never bypass a CAPTCHA.
-
-### 2. Claude Code
-
-Copy the skill folder into your personal or project skills directory:
-
+### Claude Code
 ```bash
-git clone https://github.com/<owner>/nonprofit-accountability-review.git
-# personal (all projects)
+git clone https://github.com/farshidghyasi/nonprofit-accountability-review.git
 cp -r nonprofit-accountability-review/skills/nonprofit-accountability-review ~/.claude/skills/
-# or project-only
-mkdir -p .claude/skills && cp -r nonprofit-accountability-review/skills/nonprofit-accountability-review .claude/skills/
 ```
 
-Start Claude Code and ask for a review. The skill's scripts run locally with Python 3 (standard library only).
+### ChatGPT, Grok, Gemini, Perplexity, Copilot
+Create a custom GPT / Project / Gem / Space / agent, paste [`instructions/INSTRUCTIONS.md`](instructions/INSTRUCTIONS.md) into its **instructions**, upload [`dist/knowledge-pack.md`](dist/knowledge-pack.md) as **knowledge**, and turn on web search (and code execution where offered). Details for each in the [User guide](docs/GUIDE.md).
 
-### 3. Claude API / Agent SDK
+### No setup at all
+Open [`PROMPT.md`](PROMPT.md), copy everything below the line into a new chat in any assistant, and add your request.
 
-Upload the skill folder through the Skills API and attach it to your requests, or place it in your agent's skills directory. See Anthropic's [Agent Skills documentation](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview). Give the agent web search, web fetch and code execution tools.
-
-### 4. ChatGPT
-
-Follow [`chatgpt/SETUP.md`](chatgpt/SETUP.md). In short:
-- **Custom GPT:** paste [`chatgpt/GPT_INSTRUCTIONS.md`](chatgpt/GPT_INSTRUCTIONS.md) into *Instructions*, upload the files in `skills/nonprofit-accountability-review/references/` and `templates/` as *Knowledge*, and enable **Web search** and **Code interpreter**.
-- **Project:** put the same instructions in the project and the same files in project files.
-
-### 5. Any other AI assistant
-
-Open [`PROMPT.md`](PROMPT.md), copy everything below the line into a new chat (Gemini, Copilot, Perplexity, Mistral, a local model…), and add your request at the end. Use a tool that can search the web and open pages.
+**What matters most:** the assistant must be able to **search the web and open pages**. Running code (for IRS XML and arithmetic) and a real browser (several registries block automated fetching) both help a lot.
 
 ---
 
@@ -245,23 +235,27 @@ Try both on the fictional examples in [`examples/`](examples/).
 nonprofit-accountability-review/
 ├── README.md
 ├── LICENSE
-├── PROMPT.md                         one-paste prompt for any AI assistant
-├── chatgpt/
-│   ├── GPT_INSTRUCTIONS.md           custom GPT / project instructions
-│   └── SETUP.md                      step-by-step ChatGPT setup
+├── PROMPT.md                          one-paste prompt for any AI assistant
+├── docs/
+│   └── GUIDE.md                       step-by-step guide for every assistant
+├── instructions/
+│   └── INSTRUCTIONS.md                instructions box for GPTs, Projects, Gems, Spaces, agents
 ├── dist/
-│   └── nonprofit-accountability-review.zip   ready to upload to Claude.ai
-├── examples/                         fictional data for trying the scripts
+│   ├── nonprofit-accountability-review.zip   the Claude skill, ready to upload
+│   └── knowledge-pack.md              all reference files in one document
+├── examples/                          fictional data for trying the scripts
+├── tools/
+│   └── build_dist.sh                  rebuilds dist/ from the skill folder
 └── skills/
     └── nonprofit-accountability-review/
-        ├── SKILL.md                  the skill (entry point)
+        ├── SKILL.md                   the skill (entry point)
         ├── references/
-        │   ├── jurisdictions.md      registers, thresholds and deadlines by country
-        │   ├── us-form-990-guide.md  reading Form 990, XML element names, traps
-        │   ├── scoring-rubric.md     the ten tests, tiers, severity, evidence chain
-        │   ├── report-templates.md   structures for every mode and format
-        │   ├── ethics-and-safety.md  language, privacy, safety, conflicts, AI disclosure
-        │   └── verification.md       blind fact-check protocol and prompt
+        │   ├── jurisdictions.md       registers, thresholds and deadlines by country
+        │   ├── us-form-990-guide.md   reading Form 990, XML element names, traps
+        │   ├── scoring-rubric.md      the ten tests, tiers, severity, evidence chain
+        │   ├── report-templates.md    structures for every mode and format
+        │   ├── ethics-and-safety.md   language, privacy, safety, conflicts, AI disclosure
+        │   └── verification.md        blind fact-check protocol and prompt
         ├── templates/
         │   ├── right-of-reply.md
         │   └── source-register.csv
@@ -289,7 +283,7 @@ Corrections and improvements are welcome - especially:
 - better XML coverage in the parser (older schemas, 990-PF detail);
 - worked examples using **fictional** organisations.
 
-Open an issue or a pull request. Please do not add reports about real organisations to this repository; it is a method, not a publication.
+If you edit anything in `skills/`, run `bash tools/build_dist.sh` so the zip and knowledge pack stay in sync. Open an issue or a pull request. Please do not add reports about real organisations to this repository; it is a method, not a publication.
 
 ---
 
